@@ -2,15 +2,13 @@ import getSystemInstruction from "./role.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getFormattedPrompt } from "./promptHandler.js";
 
-const genAI = new GoogleGenerativeAI("AIzaSyCBkGF3NMHPpvGzuEhPcBpZmnjjjD3Eb38");
-
-
 
 async function generateContent(role, promptType, variables) {
 
   // console.log("Role:", role);
   // console.log("Prompt Type:", promptType);
   // console.log("Variables:", variables);
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
   try {
     let model;
