@@ -10,6 +10,7 @@ import TakeTestPage from "./pages/TakeTestPage";
 import QuizResultsPage from "./pages/QuizResultsPage";
 import MentorChatUI from "./pages/MyMentors";
 import CompeteCourse from "./pages/CompeteCourse";
+import CommunityDashboard from "./community/Dashboard"
 function App() {
   return (
 
@@ -24,6 +25,7 @@ function App() {
       <Route path="/quiz-results" element={<QuizResultsPage />} />
       <Route path="/my-mentors" element={<MentorChatUI />} />
       <Route path="/certificate-download" element={<CompeteCourse />} />
+      <Route path="/community-dashboard" element={<CommunityDashboard />} />
     </Routes>
 
   );

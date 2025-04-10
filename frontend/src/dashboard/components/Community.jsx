@@ -1,158 +1,158 @@
-import React, { useState } from 'react';
-import { MessageCircle, Plus, Search, ArrowRight, UserPlus } from 'lucide-react';
-import CreateCommunity from '../community/CreateCommunity';
-import FindMentor from '../mentor/FindMentor';
-import BecomMentor from '../mentor/BecomMentor';
+import React, { useEffect, useState } from 'react';
+import { Search, User, Users, Menu, X } from 'lucide-react';
+import HomeTab from '../community/HomeTab'; // Updated path
+import PostsTab from '../community/PostsTab'; // Updated path
+import ResourcesTab from '../community/ResourcesTab'; // Updated path
+import MentorshipTab from '../community/MentorshipTab'; // Updated path
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCommunityPosts } from '../../redux/features/communitySlice'
+// import { formatDistanceToNowStrict } from 'date-fns';
 
-const Community = () => {
-  const [showCreateCommunity, setShowCreateCommunity] = useState(false);
-  const [showFindMentor, setShowFindMentor] = useState(false);
-  const [showBecomMentor, setShowBecomMentor] = useState(false);
+export default function CommunityPlatform() {
+  const [activeTab, setActiveTab] = useState('home');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { posts, loading, error } = useSelector((state) => state.community);
 
-  const handleCreateCommunityClick = () => {
-    setShowCreateCommunity(true);
-    setShowFindMentor(false);
-    setShowBecomMentor(false);
+  useEffect(() => {
+    dispatch(fetchCommunityPosts());
+  }, [dispatch]);
+
+  const resources = [
+    { id: 1, title: 'Complete React Guide', type: 'PDF', size: '2.5 MB', downloads: 123 },
+    { id: 2, title: 'CSS Cheat Sheet', type: 'PDF', size: '1.2 MB', downloads: 89 },
+    { id: 3, title: 'JavaScript Examples', type: 'ZIP', size: '4.8 MB', downloads: 67 }
+  ];
+
+  const mentors = [
+    { id: 1, name: 'Vikram Patel', expertise: 'Frontend Development', experience: '8 years', students: 12 },
+    { id: 2, name: 'Neha Gupta', expertise: 'UX Design', experience: '5 years', students: 8 },
+    { id: 3, name: 'Sanjay Mehta', expertise: 'Backend Development', experience: '10 years', students: 15 }
+  ];
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    setMobileMenuOpen(false);
   };
 
-  const handleFindMentorClick = () => {
-    setShowFindMentor(true);
-    setShowCreateCommunity(false);
-    setShowBecomMentor(false);
-  };
+  if (loading) {
+    return <div className="flex justify-center items-center min-h-screen">Loading posts...</div>;
+  }
 
-  const handleBecomMentorClick = () => {
-    setShowBecomMentor(true);
-    setShowCreateCommunity(false);
-    setShowFindMentor(false);
-  };
-
-  const handleGoBackToCommunity = () => {
-    setShowCreateCommunity(false);
-    setShowFindMentor(false);
-    setShowBecomMentor(false);
-  };
+  if (error) {
+    return <div className="flex justify-center items-center min-h-screen text-red-500">Error loading posts.</div>;
+  }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      {!showCreateCommunity && !showFindMentor && !showBecomMentor ? (
-        <>
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-bold">Community & Collaboration</h2>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-3">
+              <div className="bg-white/10 p-2 rounded-lg backdrop-blur-sm">
+                <Users className="h-6 w-6" />
+              </div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-indigo-200 text-transparent bg-clip-text">
+                DevCommunity
+              </h1>
+            </div>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex space-x-8">
+              {['Home', 'Posts', 'Resources', 'Mentorship'].map((item) => (
+                <a
+                  key={item}
+                  href="#"
+                  className={`font-medium px-3 py-2 rounded-lg transition-all hover:bg-white/10 ${activeTab === item.toLowerCase()
+                    ? 'text-white bg-white/10'
+                    : 'text-indigo-100'
+                    }`}
+                  onClick={() => handleTabClick(item.toLowerCase())}
+                >
+                  {item}
+                </a>
+              ))}
+            </nav>
+
+            <div className="hidden md:flex items-center space-x-4">
+              <div className="relative group">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="py-2 px-4 pr-10 rounded-xl text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all w-48 group-hover:w-56"
+                />
+                <Search className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
+              </div>
+              <button className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all backdrop-blur-sm">
+                <User className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Mobile menu button */}
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all"
-              onClick={handleCreateCommunityClick}
+              className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-all"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <Plus className="h-5 w-5" />
-              Create Community
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
 
-          {/* Featured Communities */}
-          <div className="mb-10">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold">Featured Communities</h3>
-              <div className="relative">
-                <Search className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Search communities..."
-                  className="pl-10 pr-4 py-2 border rounded-xl w-64 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Community Card 1 */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all">
-                {/* ... (rest of Community Card 1 content) ... */}
-                <div className="flex items-center justify-between">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3].map(i => (
-                      <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200" />
-                    ))}
-                  </div>
-                  <button className="flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium">
-                    Join Now
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Community Card 2 */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all">
-                {/* ... (rest of Community Card 2 content) ... */}
-                <div className="flex items-center justify-between">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map(i => (
-                      <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200" />
-                    ))}
-                  </div>
-                  <button className="flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium">
-                    Join Now
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Create Community Card (now a button to trigger the state change) */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 hover:shadow-md transition-all cursor-pointer" onClick={handleCreateCommunityClick}>
-                <div className="h-full flex flex-col items-center justify-center text-center">
-                  <div className="bg-white p-3 rounded-xl shadow-sm mb-4">
-                    <UserPlus className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <h4 className="font-semibold mb-2">Create Your Community</h4>
-                  <p className="text-sm text-gray-600 mb-4">Start your own community and connect with like-minded developers</p>
-                  <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all">
-                    <Plus className="h-4 w-4" />
-                    Get Started
-                  </button>
+          {/* Mobile Navigation */}
+          {mobileMenuOpen && (
+            <div className="md:hidden mt-4 bg-white/10 rounded-xl backdrop-blur-sm">
+              {['Home', 'Posts', 'Resources', 'Mentorship'].map((item) => (
+                <a
+                  key={item}
+                  href="#"
+                  className="block px-4 py-3 text-indigo-100 hover:bg-white/10 first:rounded-t-xl last:rounded-b-xl transition-all"
+                  onClick={() => handleTabClick(item.toLowerCase())}
+                >
+                  {item}
+                </a>
+              ))}
+              <div className="p-4 border-t border-white/10">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="w-full py-2 px-4 pr-10 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                  <Search className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
                 </div>
               </div>
             </div>
-          </div>
+          )}
+        </div>
+      </header>
 
-          {/* Mentorship Section */}
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-8">
-            <div className="max-w-3xl mx-auto">
-              <div className="flex items-center gap-3 mb-6">
-                <MessageCircle className="h-7 w-7 text-purple-600" />
-                <h3 className="text-2xl font-bold">Mentorship Program</h3>
-              </div>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                  <h4 className="text-lg font-semibold">Looking for Guidance?</h4>
-                  <p className="text-gray-600">Connect with experienced developers and accelerate your learning journey.</p>
-                  <button
-                    className="w-full bg-white text-purple-600 py-3 rounded-xl font-medium border border-purple-200 hover:bg-purple-50 transition-all"
-                    onClick={handleFindMentorClick}
-                  >
-                    Find a Mentor
-                  </button>
-                </div>
-                <div className="space-y-4">
-                  <h4 className="text-lg font-semibold">Want to Share Knowledge?</h4>
-                  <p className="text-gray-600">Help others grow by sharing your expertise and experience.</p>
-                  <button
-                    className="w-full bg-purple-600 text-white py-3 rounded-xl font-medium hover:bg-purple-700 transition-all"
-                    onClick={handleBecomMentorClick}
-                  >
-                    Become a Mentor
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      ) : showCreateCommunity ? (
-        <CreateCommunity onGoBack={handleGoBackToCommunity} />
-      ) : showFindMentor ? (
-        <FindMentor onGoBack={handleGoBackToCommunity} />
-      ) : showBecomMentor ? (
-        <BecomMentor onGoBack={handleGoBackToCommunity} />
-      ) : null}
+      {/* Main content */}
+      <main className="flex-grow container mx-auto px-4 py-8">
+        {activeTab === 'home' && (
+          <HomeTab
+            setActiveTab={setActiveTab}
+            posts={posts}
+            resources={resources}
+          />
+        )}
+        {activeTab === 'posts' && (
+          <PostsTab
+            posts={posts.map(post => ({
+              id: post._id,
+              author: post.author?.name || 'Unknown Author',
+              authorPhoto: post.author?.photo,
+              title: post.title,
+              content: post.description,
+              likes: post?.likes || 0,
+              comments: post.comments?.length || 0,
+              createdAt: post.createdAt,
+              fileUrl: post.fileUrl
+            }))}
+          />
+        )}
+        {activeTab === 'resources' && <ResourcesTab resources={resources} />}
+        {activeTab === 'mentorship' && <MentorshipTab mentors={mentors} />}
+      </main>
     </div>
   );
-};
-
-export default Community;
+}

@@ -13,6 +13,32 @@ const AIAssistant = () => {
 
   const handleInputChange = (e) => setUserInput(e.target.value);
 
+  // Parses text to identify and format highlighted sections between ** **
+  const parseHighlightedText = (text) => {
+    if (!text) return [];
+
+    // Regex to match text between ** ** (non-greedy)
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        // This is a highlighted section
+        const highlightedText = part.slice(2, -2); // Remove ** from both ends
+        return (
+          <span
+            key={index}
+            className="bg-gradient-to-r from-purple-100 to-indigo-100 px-1 py-0.5 rounded font-medium text-indigo-800 border-l-2 border-purple-500"
+          >
+            {highlightedText}
+          </span>
+        );
+      } else {
+        // Regular text
+        return <span key={index}>{part}</span>;
+      }
+    });
+  };
+
   // Improved typing animation with variable speed
   const typeMessage = (messageId, text) => {
     let index = 0;
@@ -105,6 +131,46 @@ const AIAssistant = () => {
     return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  // Helper function to render the message content with proper formatting
+  const renderMessage = (message, displayText) => {
+    // For user messages, just show the plain text
+    if (message.sender === 'user') {
+      return message.text;
+    }
+
+    // For bot messages that are still typing, parse for highlighting
+    if (displayText) {
+      // Handle code blocks first
+      if (displayText.includes('```')) {
+        const codeBlockRegex = /(```(?:[\w-]+)?\n[\s\S]*?\n```)/g;
+        const parts = displayText.split(codeBlockRegex);
+
+        return parts.map((part, index) => {
+          if (part.startsWith('```') && part.endsWith('```')) {
+            // This is a code block - don't apply highlighting within code
+            return (
+              <pre key={index} className="bg-gray-100 p-3 rounded-lg my-2 overflow-x-auto text-sm text-gray-800 font-mono">
+                {part.replace(/```(?:[\w-]+)?\n|```$/g, '')}
+              </pre>
+            );
+          } else {
+            // This is regular text - apply highlighting
+            return (
+              <div key={index}>
+                {parseHighlightedText(part)}
+              </div>
+            );
+          }
+        });
+      } else {
+        // No code blocks, just apply highlighting
+        return parseHighlightedText(displayText);
+      }
+    }
+
+    return '';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 p-4 sm:p-6 flex flex-col">
       <div className="max-w-6xl mx-auto w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col flex-grow">
@@ -170,10 +236,9 @@ const AIAssistant = () => {
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
                       : 'bg-white border border-purple-100'
                       }`}>
-                      <p className={`text-sm sm:text-base whitespace-pre-wrap ${msg.sender === 'user' ? 'text-white' : 'text-gray-800'
-                        }`}>
-                        {msg.sender === 'bot' ? displayTexts[msg.id] || '' : msg.text}
-                      </p>
+                      <div className={`text-sm sm:text-base whitespace-pre-wrap ${msg.sender === 'user' ? 'text-white' : 'text-gray-800'}`}>
+                        {renderMessage(msg, msg.sender === 'bot' ? displayTexts[msg.id] : msg.text)}
+                      </div>
                     </div>
                     <div className={`text-xs text-gray-500 mt-1 ${msg.sender === 'user' ? 'text-right mr-2' : 'ml-2'}`}>
                       {getCurrentTime()}
