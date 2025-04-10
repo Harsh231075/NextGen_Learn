@@ -1,6 +1,6 @@
 import ChatHistory from "../model/ChatHistoryModel.js";
 import User from "../model/userModel.js";
-import generateAIResponse from "../ai/chatService.js";
+import { buildChatChain } from "../agents/chains/chatChain.js";
 
 export const chatWithAI = async (req, res) => {
   try {
@@ -18,29 +18,27 @@ export const chatWithAI = async (req, res) => {
     // 🔹 **Chat history fetch karo**
     let chat = await ChatHistory.findOne({ userId });
 
-    // **Agar nahi mila toh naya doc create karo**
     if (!chat) {
       chat = new ChatHistory({ userId, messages: [] });
-      await chat.save(); // **Document ko save karna zaroori hai**
+      await chat.save();
     }
 
-    // 🔹 **Last 5 messages as context**
-    const lastMessages = chat.messages.map(msg => `${msg.role}: ${msg.content}`).join("\n");
+    console.log("Previous Chats:\n", chat.messages.slice(-5));
 
-    // 🔹 **AI ko chat history ke saath prompt bhejo**
-    const aiPrompt = `Chat History:\n${lastMessages}\n\nUser: ${prompt}\nBot:`;
-    const aiResponse = await generateAIResponse(aiPrompt);
+    const chain = await buildChatChain(chat.messages.slice(-5)); // Limit to last 5 messages
+    // Run chain with current user input
+    const response = await chain.invoke({ input: prompt });
 
-    if (!aiResponse) {
+    if (!response.content) {
       return res.status(400).json({ error: "AI response error" });
     }
 
     // 🔹 **Chat history update karo**
     chat.messages.push({ role: "user", content: prompt });
-    chat.messages.push({ role: "bot", content: aiResponse });
+    chat.messages.push({ role: "bot", content: response.content });
     await chat.save();
 
-    res.status(200).json({ response: aiResponse, history: chat.messages.slice(-5) });
+    res.status(200).json({ response: response.content, history: chat.messages.slice(-5) });
   } catch (error) {
     console.error("Chat Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
