@@ -158,16 +158,16 @@ const SimpleDashboardHeader = ({ userData }) => {
 };
 
 const PerformanceOverview = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const dashboardData = useSelector(selectDashboardData);
   const loading = useSelector(selectDashboardLoading);
   const error = useSelector(selectDashboardError);
 
   // Fetch dashboard data when component mounts
-  useEffect(() => {
-    dispatch(fetchDashboardData());
-    dispatch(fetchRegisteredCourses());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchDashboardData());
+  //   dispatch(fetchRegisteredCourses());
+  // }, [dispatch]);
 
   // Loading state
   if (loading) {

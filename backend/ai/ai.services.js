@@ -25,7 +25,7 @@ async function generateContent(role, promptType, variables) {
       });
     }
     const formattedPrompt = getFormattedPrompt(promptType, variables);
-    // console.log("Final Prompt:", formattedPrompt);
+    console.log("Final Prompt:", formattedPrompt);
     const result = await model.generateContent(formattedPrompt);
     return result.response.text();
   } catch (error) {

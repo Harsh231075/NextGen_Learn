@@ -5,25 +5,19 @@ import PostsTab from '../community/PostsTab'; // Updated path
 import ResourcesTab from '../community/ResourcesTab'; // Updated path
 import MentorshipTab from '../community/MentorshipTab'; // Updated path
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCommunityPosts } from '../../redux/features/communitySlice'
-// import { formatDistanceToNowStrict } from 'date-fns';
+import { fetchCommunityPosts, fetchCommunityResources } from '../../redux/features/communitySlice'
 
 export default function CommunityPlatform() {
   const [activeTab, setActiveTab] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dispatch = useDispatch();
-  const { posts, loading, error } = useSelector((state) => state.community);
+  const { posts, resources, loading, error } = useSelector((state) => state.community);
 
+  console.log("resouces=", resources)
   useEffect(() => {
     dispatch(fetchCommunityPosts());
+    dispatch(fetchCommunityResources());
   }, [dispatch]);
-
-  const resources = [
-    { id: 1, title: 'Complete React Guide', type: 'PDF', size: '2.5 MB', downloads: 123 },
-    { id: 2, title: 'CSS Cheat Sheet', type: 'PDF', size: '1.2 MB', downloads: 89 },
-    { id: 3, title: 'JavaScript Examples', type: 'ZIP', size: '4.8 MB', downloads: 67 }
-  ];
-
   const mentors = [
     { id: 1, name: 'Vikram Patel', expertise: 'Frontend Development', experience: '8 years', students: 12 },
     { id: 2, name: 'Neha Gupta', expertise: 'UX Design', experience: '5 years', students: 8 },
@@ -150,7 +144,15 @@ export default function CommunityPlatform() {
             }))}
           />
         )}
-        {activeTab === 'resources' && <ResourcesTab resources={resources} />}
+        {activeTab === 'resources' && <ResourcesTab resources={resources.map(resources => ({
+          id: resources.resourceId,
+          title: resources.title,
+          downloads: resources.totalDownloads,
+          name: resources.authorInfo.name,
+          photo: resources.authorInfo.photo,
+          description: resources.description,
+          download: resources.file,
+        }))} />}
         {activeTab === 'mentorship' && <MentorshipTab mentors={mentors} />}
       </main>
     </div>

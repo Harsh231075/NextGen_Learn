@@ -3,8 +3,6 @@ import mongoose from 'mongoose';
 import User from "../model/userModel.js";
 import LearningProgress from "../model/learningModel.js";
 import QuizPerformance from "../model/Quizemodel.js";
-// import AIInsights from "../model/aiInsightsModel.js";
-// import LearningGoal from "../model/learningGoalModel.js";
 import authenticateUser from '../middleware/authMiddleware.js'
 import StudyModel from "../model/studyModel.js";
 
@@ -40,6 +38,8 @@ router.get("/dashboard", authenticateUser, async (req, res) => {
         projects: user.projects,
         skills: user.skills,
         bio: user.bio,
+        createdcommunity: user.createdCommunities,
+        mentor: user.point >= 100 ? true : false,
       },
       learningProgress: progress
         ? {

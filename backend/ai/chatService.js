@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const generateAIResponse = async (prompt) => {
   const apiKey = process.env.GEMINI_API_KEY;
-  console.log("Your Gemini Key:", apiKey); // Debug
+  // console.log("Your Gemini Key:", apiKey); // Debug
 
   try {
     const genAI = new GoogleGenerativeAI(apiKey);

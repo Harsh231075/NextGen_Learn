@@ -3,15 +3,15 @@ import React from 'react';
 import { Menu, Home, BookOpen, Bot, Users, Gift, Settings, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const Sidebar = ({ onSectionChange, activeSection }) => {
+const Sidebar = () => {
   const menuItems = [
-    { path: 'overview', icon: <Home />, title: 'Performance Overview' },
-    { path: 'learning', icon: <BookOpen />, title: 'Learning Path' },
-    { path: 'ai', icon: <Bot />, title: 'AI Assistant' },
-    { path: 'community', icon: <Users />, title: 'Community' },
-    { path: 'referral', icon: <Gift />, title: 'Referral & Earnings' },
-    { path: 'profile', icon: <Settings />, title: 'Profile & Settings' },
-    { path: 'certificates', icon: <Award />, title: 'Certificates' }
+    { path: '/dashboard/overview', icon: <Home />, title: 'Performance Overview' },
+    { path: '/dashboard/learning', icon: <BookOpen />, title: 'Learning Path' },
+    { path: '/dashboard/ai', icon: <Bot />, title: 'AI Assistant' },
+    { path: '/dashboard/community', icon: <Users />, title: 'Community' },
+    { path: '/dashboard/referral', icon: <Gift />, title: 'Referral & Earnings' },
+    { path: '/dashboard/profile', icon: <Settings />, title: 'Profile & Settings' },
+    { path: '/dashboard/certificates', icon: <Award />, title: 'Certificates' }
   ];
 
   return (
@@ -27,13 +27,16 @@ const Sidebar = ({ onSectionChange, activeSection }) => {
 
       <nav className="flex-1 space-y-2">
         {menuItems.map((item) => (
-          <SidebarItem
+          <Link
             key={item.path}
-            icon={item.icon}
-            title={item.title}
-            isActive={activeSection === item.path}
-            onClick={() => onSectionChange(item.path)}
-          />
+            to={item.path}
+            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-white/10`}
+          >
+            <div className={`text-blue-300`}>
+              {item.icon}
+            </div>
+            <span className="font-medium">{item.title}</span>
+          </Link>
         ))}
       </nav>
 
@@ -59,23 +62,6 @@ const Sidebar = ({ onSectionChange, activeSection }) => {
         </div>
       </div>
     </div>
-  );
-};
-
-const SidebarItem = ({ icon, title, isActive, onClick }) => {
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${isActive
-        ? 'bg-gradient-to-r from-blue-500 to-indigo-500 shadow-lg'
-        : 'hover:bg-white/10'
-        }`}
-    >
-      <div className={`${isActive ? 'text-white' : 'text-blue-300'}`}>
-        {icon}
-      </div>
-      <span className="font-medium">{title}</span>
-    </button>
   );
 };
 

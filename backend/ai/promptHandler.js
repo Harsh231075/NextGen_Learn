@@ -125,7 +125,116 @@ const prompts = {
 
 
 🔹 
+`,
+
+
+  mentor_test: `You are an expert mentor and test paper generator.
+
+A user has submitted a form to become a mentor, and based on the following details, you are to create a **tough test paper** to evaluate their knowledge and suitability.
+
+Here are the details:
+{{test}}
+
+
+
+ Your task is to generate a test paper that includes:
+1. At least **10 multiple-choice questions (MCQs)** with 4 options each, and only one correct answer.
+2. At least **5 written (descriptive) questions** that deeply test the user’s understanding.
+3. The paper should reflect **intermediate to advanced** difficulty based on the user's stated knowledge and learning approach.
+4. Questions should be based on the selectedCourse and also include general technical and mentoring-related questions based on the user's experience and goals.
+
+### Output Format:
+Return the final paper in the following **JSON structure**:
+
+json
+{
+  "mentor_test": {
+    "mcq": [
+      {
+        "question": "Your MCQ question here?",
+        "options": ["Option A", "Option B", "Option C", "Option D"],
+      },
+      ...
+    ],
+      "written": [
+        {
+          "question": "Your written question here?"
+        },
+        ...
+    ]
+  }
+}
+`,
+
+  mentor_test_check: `You are a strict but fair AI-based evaluator.
+
+You will receive a variable called {{mentor_test_check}}, containing:
+- A list of multiple-choice questions (mcq) where each item has:
+  - question: The question asked.
+  - selectedAnswer: The answer chosen by the user.
+
+- A list of written-response questions (written) where each item has:
+  - question: The open-ended question asked.
+  - answer: The response written by the user.
+
+Your tasks are:
+
+### 1. Evaluate MCQs
+- Use your domain knowledge to infer the **correct answer** for each question.
+- Compare the user's selectedAnswer with your inferred answer.
+- Return:
+  - isCorrect: true or false
+  - correctAnswer: the inferred correct answer
+  - feedback: short feedback (only if incorrect)
+
+### 2. Evaluate Written Answers
+- Read the response and rate it on clarity, accuracy, and depth.
+- Give:
+  - score: from 0 to 10
+  - evaluation: "satisfactory" if score ≥ 6, otherwise "needs improvement"
+  - feedback: what was good or missing in the answer
+
+### 3. Final Decision
+- Calculate total marks:
+  - Each correct MCQ = 1 mark
+  - Written total = sum of scores (out of 10 per question)
+- If total score ≥ 70% of the max possible, then:
+  - "status": "pass"
+  - Add a motivating "message" like "Congratulations! You're ready to be a mentor!"
+- Otherwise:
+  - "status": "fail"
+  - Give a helpful "message" with suggestions to improve.
+
+### Output JSON format:  
+Return the entire evaluation as a JSON constant named mentor_test_result:
+
+json
+{
+  "status": "pass" or "fail",
+    "message": "Motivational or improvement message",
+      "mcqAnalysis": [
+        {
+          "question": "string",
+          "selectedAnswer": "string",
+          "correctAnswer": "string (inferred by you)",
+          "isCorrect": true or false,
+          "feedback": "string (if incorrect)"
+        }
+      ],
+        "writtenAnalysis": [
+          {
+            "question": "string",
+            "answer": "string",
+            "score": number(0 - 10),
+            "evaluation": "satisfactory" or "needs improvement",
+            "feedback": "string"
+          }
+        ]
+}
+
+{mentor_test}
 `
+
 
 };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BookOpen, Clock, BrainCircuit, Plus, ArrowLeft, Pencil, Calendar, ArrowRight, Trophy } from 'lucide-react';
+import { BookOpen, Clock, BrainCircuit, ArrowLeft, Pencil, Calendar, ArrowRight, Trophy } from 'lucide-react';
 import AIGuidance from '../AIGuidance/AIGuidance';
 import UserForm from '../AIGuidance/UserForm'
 import { useDispatch, useSelector } from 'react-redux';

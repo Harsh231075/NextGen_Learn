@@ -42,8 +42,8 @@ const AIAssistant = () => {
   // Improved typing animation with variable speed
   const typeMessage = (messageId, text) => {
     let index = 0;
-    const minDelay = 15;
-    const maxDelay = 45;
+    const minDelay = 5;
+    const maxDelay = 15;
 
     const typeNextChar = () => {
       if (index <= text.length) {

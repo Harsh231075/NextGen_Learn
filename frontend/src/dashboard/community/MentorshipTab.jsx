@@ -1,58 +1,114 @@
-import React from 'react';
-import { User } from 'lucide-react';
+import React, { useState } from 'react';
+import { User, Star, Users, Clock, Award, ChevronRight } from 'lucide-react';
+import BecomeMentor from '../mentor/BecomeMentor';
+import { useSelector } from 'react-redux';
+import { selectDashboardData } from '../../redux/features/dashboardSlice';
 
 function MentorshipTab({ mentors }) {
+  const dashboardData = useSelector(selectDashboardData);
+  const isMentor = dashboardData?.user?.mentor;
+  const [showBecomeMentor, setShowBecomeMentor] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleBecomeMentorClick = () => {
+    if (isMentor) {
+      setShowBecomeMentor(true);
+    } else {
+      setShowModal(true);
+    }
+  };
+
+  const handleBack = () => {
+    setShowBecomeMentor(false);
+  };
+
+  if (showBecomeMentor) {
+    return <BecomeMentor onBack={handleBack} />;
+  }
+
   return (
-    <div>
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl text-white p-6 mb-8 shadow-md">
-        <div className="md:flex justify-between items-center">
-          <div className="mb-4 md:mb-0">
-            <h2 className="text-2xl font-bold mb-2">Mentorship Program</h2>
-            <p className="text-indigo-100">Connect with experienced developers or share your knowledge</p>
-          </div>
-          <div className="flex gap-4">
-            <button className="bg-white text-indigo-600 px-5 py-2 rounded-lg font-semibold hover:bg-indigo-50 transition">
-              Find a Mentor
-            </button>
-            <button className="bg-indigo-700 text-white px-5 py-2 rounded-lg font-semibold hover:bg-indigo-800 border border-indigo-300 transition">
-              Become a Mentor
-            </button>
-          </div>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold text-gray-900 mb-3">Mentorship Program</h2>
+        <p className="text-gray-600 text-lg mb-8">Connect with experienced developers and accelerate your learning journey</p>
+        <button
+          onClick={handleBecomeMentorClick}
+          className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+        >
+          Become a Mentor
+        </button>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {mentors.map(mentor => (
-          <div key={mentor.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+          <div key={mentor.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
             <div className="p-6">
-              <div className="flex items-center mb-4">
-                <div className="h-12 w-12 rounded-full bg-indigo-200 flex items-center justify-center mr-3">
-                  <User className="h-6 w-6 text-indigo-600" />
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center">
+                    <User className="h-8 w-8 text-indigo-600" />
+                  </div>
+                  <div className="absolute -bottom-2 -right-2 bg-green-500 w-5 h-5 rounded-full border-2 border-white"></div>
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-800">{mentor.name}</h3>
-                  <p className="text-indigo-600">{mentor.expertise}</p>
+                  <h3 className="font-bold text-xl text-gray-900">{mentor.name}</h3>
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Award className="h-4 w-4 text-indigo-500" />
+                    <span className="text-sm">{mentor.expertise}</span>
+                  </div>
                 </div>
               </div>
-              <div className="mb-4">
-                <div className="flex justify-between mb-2">
-                  <span className="text-gray-600">Experience:</span>
-                  <span className="font-medium">{mentor.experience}</span>
+
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="bg-gray-50 rounded-xl p-3">
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Clock className="h-4 w-4 text-indigo-500" />
+                    <span className="text-sm font-medium">{mentor.experience} Experience</span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Students:</span>
-                  <span className="font-medium">{mentor.students}</span>
+                <div className="bg-gray-50 rounded-xl p-3">
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Users className="h-4 w-4 text-indigo-500" />
+                    <span className="text-sm font-medium">{mentor.students} Students</span>
+                  </div>
                 </div>
               </div>
-              <button className="w-full bg-indigo-100 text-indigo-700 py-2 rounded-lg font-medium hover:bg-indigo-200 transition">
-                Request Mentorship
-              </button>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1">
+                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
+                  <span className="font-semibold text-gray-900">4.9</span>
+                  <span className="text-gray-500 text-sm">(120 reviews)</span>
+                </div>
+                <button className="flex items-center gap-2 bg-indigo-50 text-indigo-600 font-semibold py-2 px-4 rounded-xl hover:bg-indigo-100 transition-colors duration-300">
+                  Connect
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Not Eligible</h2>
+            <p className="text-gray-600 mb-6">
+              You need to meet certain criteria to become a mentor. Please check our requirements and try again later.
+            </p>
+            <button
+              onClick={() => setShowModal(false)}
+              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-3 rounded-xl transition-colors duration-300"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-export default MentorshipTab;
+export default MentorshipTab; 
