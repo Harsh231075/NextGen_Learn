@@ -14,6 +14,9 @@ import CommunityDashboard from "./community/Dashboard"
 import MentorTest from "./pages/MentorTest";
 import MentorResult from "./pages/MentorResult";
 import Dashboard from "./dashboard/Dashboard"; // Keep the import
+import VoiceInputOutput from "./pages/VoiceInputOutput";
+import Chat from "./components/Chat";
+import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -21,6 +24,19 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
+
+  const token = localStorage.getItem("token");
+
+  // Decode JWT to get current user info
+  let currentUser = null;
+  if (token) {
+    try {
+      currentUser = jwtDecode(token); // contains _id, name, etc.
+    } catch (err) {
+      console.error("Invalid token:", err);
+    }
+  }
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -36,6 +52,8 @@ function App() {
       {/* <Route path="/community-dashboard" element={<CommunityDashboard />} /> */}
       <Route path="/mentor-test" element={<MentorTest />} />
       <Route path="/mentor-result" element={<MentorResult />} />
+      <Route path="/voice" element={<VoiceInputOutput></VoiceInputOutput>} />
+      <Route path="/chat" element={<Chat user={currentUser} />} />
     </Routes>
   );
 }
