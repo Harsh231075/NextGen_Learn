@@ -1,6 +1,7 @@
 import ChatHistory from "../model/ChatHistoryModel.js";
 import User from "../model/userModel.js";
-import { buildChatChain } from "../agents/chains/chatChain.js";
+
+import generateAIResponse from "../ai/chatService.js"
 
 export const chatWithAI = async (req, res) => {
   try {
@@ -11,11 +12,11 @@ export const chatWithAI = async (req, res) => {
       return res.status(400).json({ error: "User ID and prompt are required" });
     }
 
-    // 🔹 **User check karo**
+    // 🔹 User check
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // 🔹 **Chat history fetch karo**
+    // 🔹 Chat history fetch
     let chat = await ChatHistory.findOne({ userId });
 
     if (!chat) {
@@ -23,26 +24,32 @@ export const chatWithAI = async (req, res) => {
       await chat.save();
     }
 
-    console.log("Previous Chats:\n", chat.messages.slice(-5));
+    // 🔹 Last 10 messages lo
+    const lastMessages = chat.messages.slice(-10);
 
-    const chain = await buildChatChain(chat.messages.slice(-5)); // Limit to last 5 messages
-    // Run chain with current user input
-    const response = await chain.invoke({ input: prompt });
+    // 🔹 Current prompt bhi add karo
+    const conversation = [
+      ...lastMessages,
+      { role: "user", content: prompt }
+    ];
 
-    if (!response.content) {
+    // console.log("Conversation going to AI:\n", conversation);
+
+    // 🔹 AI se response lao (ab pura conversation jayega)
+    const response = await generateAIResponse(conversation);
+
+    if (!response) {
       return res.status(400).json({ error: "AI response error" });
     }
 
-    // 🔹 **Chat history update karo**
+    // 🔹 Chat history update
     chat.messages.push({ role: "user", content: prompt });
-    chat.messages.push({ role: "bot", content: response.content });
+    chat.messages.push({ role: "bot", content: response });
     await chat.save();
 
-    res.status(200).json({ response: response.content, history: chat.messages.slice(-5) });
+    res.status(200).json({ response, history: chat.messages.slice(-10) });
   } catch (error) {
     console.error("Chat Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-

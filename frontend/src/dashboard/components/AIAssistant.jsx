@@ -86,6 +86,7 @@ const AIAssistant = () => {
 
       // Extract only the final response
       const fullResponse = response.data.response;
+      console.log(fullResponse);
       const finalResponse = fullResponse.includes('Therefore, the best response is:')
         ? fullResponse.split('Therefore, the best response is:').pop().trim().replace(/^["']|["']$/g, '')
         : fullResponse;

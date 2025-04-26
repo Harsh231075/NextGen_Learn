@@ -1,9 +1,16 @@
 // Sidebar.jsx
 import React from 'react';
-import { Menu, Home, BookOpen, Bot, Users, Gift, Settings, Award } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Menu, Home, BookOpen, Bot, Users, Gift, Settings, Award, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Token remove
+    navigate('/'); // Navigate to home
+  };
+
   const menuItems = [
     { path: '/dashboard/overview', icon: <Home />, title: 'Performance Overview' },
     { path: '/dashboard/learning', icon: <BookOpen />, title: 'Learning Path' },
@@ -30,9 +37,9 @@ const Sidebar = () => {
           <Link
             key={item.path}
             to={item.path}
-            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-white/10`}
+            className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-white/10"
           >
-            <div className={`text-blue-300`}>
+            <div className="text-blue-300">
               {item.icon}
             </div>
             <span className="font-medium">{item.title}</span>
@@ -40,26 +47,15 @@ const Sidebar = () => {
         ))}
       </nav>
 
+      {/* Bottom Section */}
       <div className="mt-auto pt-6 border-t border-white/10">
-        <Link to="/my-mentors" className='w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 bg-green-400 mb-2'>
-          <Users /> Talk To Mentor
-        </Link>
-        <div className="bg-white/10 rounded-xl p-4">
-          <div className="flex items-center gap-3 mb-3">
-            <img
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop"
-              alt="Profile"
-              className="h-10 w-10 rounded-full"
-            />
-            <div>
-              <div className="font-medium">Alex Johnson</div>
-              <div className="text-sm text-blue-200">Pro Member</div>
-            </div>
-          </div>
-          <div className="text-sm text-blue-200">
-            Learning streak: <span className="text-white font-medium">15 days</span>
-          </div>
-        </div>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 bg-red-500 hover:bg-red-600 text-white"
+        >
+          <LogOut />
+          <span className="font-medium">Logout</span>
+        </button>
       </div>
     </div>
   );
