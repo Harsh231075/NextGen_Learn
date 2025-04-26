@@ -117,7 +117,7 @@ const ReferralSystem = () => {
         </div>
 
         {/* Earnings Card */}
-        <div className="bg-white rounded-xl shadow-md p-6 transform transition-all hover:scale-105">
+        {/* <div className="bg-white rounded-xl shadow-md p-6 transform transition-all hover:scale-105">
           <div className="flex items-center gap-2 mb-4">
             <div className="bg-yellow-100 p-2 rounded-full">
               <Coins className="h-6 w-6 text-yellow-500" />
@@ -144,7 +144,7 @@ const ReferralSystem = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Achievements Card */}
         <div className="bg-white rounded-xl shadow-md p-6 transform transition-all hover:scale-105">

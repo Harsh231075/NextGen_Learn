@@ -29,9 +29,14 @@ export const aiRequest = ("/study", async (req, res) => {
         week: responseData.total_weeks,
       });
 
+      console.log("responve=>", responseData);
       const learningProgress = await LearningProgress.findOne({ userId: userId });
-      learningProgress.ongoingTopics += 1;
-      await learningProgress.save();
+      if (learningProgress) {
+        learningProgress.ongoingTopics += 1;
+        await learningProgress.save();
+      };
+
+
 
       const savedStudy = await studyData.save(); // Database me save kiya
 

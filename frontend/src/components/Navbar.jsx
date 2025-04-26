@@ -42,15 +42,15 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link to={appendRef("/")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+            {/* <Link to={appendRef("/")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               Home
-            </Link>
-            <Link to={appendRef("/community")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+            </Link> */}
+            {/* <Link to={appendRef("/community")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               Community
-            </Link>
-            <Link to={appendRef("/leaderboard")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+            </Link> */}
+            {/* <Link to={appendRef("/leaderboard")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               Leaderboard
-            </Link>
+            </Link> */}
 
             <div className="flex items-center space-x-4 ml-8">
               <Link
@@ -84,7 +84,7 @@ const Navbar = () => {
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div className="md:hidden mt-4 pb-4 space-y-4">
-            <Link to={appendRef("/")} className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+            {/* <Link to={appendRef("/")} className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
               Home
             </Link>
             <Link to={appendRef("/community")} className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
@@ -92,7 +92,7 @@ const Navbar = () => {
             </Link>
             <Link to={appendRef("/leaderboard")} className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
               Leaderboard
-            </Link>
+            </Link> */}
             <div className="pt-4 space-y-2">
               <Link
                 to={appendRef("/sign-login")}
