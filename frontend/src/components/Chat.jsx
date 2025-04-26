@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 // Replace with your actual server URLs
 const SOCKET_URL = 'http://localhost:4000';
 const USERS_API_URL = 'http://localhost:4000/api/chat/online-users';
-const SEND_MESSAGE_API = 'http://localhost:4000/api/chat/messages/send';
+const SEND_MESSAGE_API = 'http://localhost:4000/api/chat/messages';
 const GET_MESSAGES_API = 'http://localhost:4000/api/chat/messages';
 
 function ChatApp() {
@@ -18,7 +18,7 @@ function ChatApp() {
   const [isLoading, setIsLoading] = useState(false);
   const messageEndRef = useRef(null);
   const [unreadMessages, setUnreadMessages] = useState({});
-
+  const token = localStorage.getItem('token');
   // Connect to socket and fetch users
   useEffect(() => {
     // Get current user from localStorage or authentication system
@@ -86,7 +86,12 @@ function ChatApp() {
   const fetchUsers = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(USERS_API_URL);
+      const response = await fetch(USERS_API_URL, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
 
       if (data.users && Array.isArray(data.users)) {
@@ -153,7 +158,7 @@ function ChatApp() {
     e.preventDefault();
 
     if (!message.trim() || !selectedUser || !currentUser) return;
-
+    console.log(selectedUser.id);
     const messageData = {
       senderId: currentUser.id,
       receiverId: selectedUser.id,
@@ -166,13 +171,14 @@ function ChatApp() {
       const response = await fetch(SEND_MESSAGE_API, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(messageData)
       });
 
       const data = await response.json();
-
+      console.log(data);
       if (data.success) {
         // Send via socket for real-time communication
         socket.emit('message', {

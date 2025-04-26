@@ -120,9 +120,9 @@ export const createGroup = async (req, res) => {
 // Send message
 export const sendMessage = async (req, res) => {
   try {
-    const { receiver, group, content, type } = req.body;
+    const { receiverId, content, type } = req.body;
     const sender = req.userId;
-
+    console.log(receiverId, content);
     if (!content) {
       return res.status(400).json({ message: 'Message content is required' });
     }
@@ -131,16 +131,14 @@ export const sendMessage = async (req, res) => {
       return res.status(400).json({ message: 'Group ID is required for group messages' });
     }
 
-    if (type === 'private' && !receiver) {
+    if (type === 'private' && !receiverId) {
       return res.status(400).json({ message: 'Receiver ID is required for private messages' });
     }
 
     const message = await Message.create({
       sender,
-      receiver,
-      group,
+      receiver: receiverId,
       content,
-      type
     });
 
     const populatedMessage = await message.populate([

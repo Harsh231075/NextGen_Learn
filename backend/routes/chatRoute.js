@@ -14,7 +14,7 @@ import {
 const router = express.Router();
 
 // All routes are protected with authentication middleware
-// router.use(authenticateUser);
+router.use(authenticateUser);
 
 // Get all user's chats (private + groups)
 router.get('/chats', getUserChats);
@@ -29,7 +29,7 @@ router.get('/group/:groupId', getGroupMessages);
 router.post('/group', createGroup);
 
 // Send message (private or group)
-router.post('/message', sendMessage);
+router.post('/messages', sendMessage);
 
 // Get online users
 router.get('/online-users', getOnlineUsers);

@@ -85,12 +85,14 @@ export const registerUser = ('/register', async (req, res) => {
 
 export const login = ('/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log(email, password);
   try {
     if (!email || !password) {
       return res.status(400).json({ message: 'Please fill all required fields' });
     }
 
     const user = await User.findOne({ email });
+    console.log(user);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
