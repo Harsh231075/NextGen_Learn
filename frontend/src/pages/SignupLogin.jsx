@@ -1,13 +1,14 @@
+// src/components/SignupLogin.js
 import React, { useState, useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, registerUser, setReferral, selectAuth } from '../redux/features/authSlice';
+import { loginUser, registerUser, setReferral, selectAuth, clearError } from '../redux/features/authSlice'; // Import clearError
 
 function SignupLogin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token, isLoading, error, referralCode: storedReferralCode } = useSelector(selectAuth);
+  const { token, isLoading, error, referralCode: storedReferralCode, isRegistered } = useSelector(selectAuth); // Get isRegistered
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
@@ -33,7 +34,7 @@ function SignupLogin() {
     }
   }, [dispatch, storedReferralCode]);
 
-  // Redirect if token exists
+  // Redirect if token exists and handle registration success
   useEffect(() => {
     if (token) {
       toast.success("Login Successful!");
@@ -41,8 +42,14 @@ function SignupLogin() {
     }
     if (error) {
       toast.error(error);
+      dispatch(clearError()); // Clear the error after displaying
     }
-  }, [token, error, navigate]);
+    if (isRegistered) {
+      toast.success("Registration Successful!");
+      setIsLogin(true); // Automatically switch to the login tab
+      dispatch(clearError()); // Clear the registration success flag
+    }
+  }, [token, error, navigate, isRegistered, dispatch]);
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;

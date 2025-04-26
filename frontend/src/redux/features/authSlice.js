@@ -8,6 +8,7 @@ const initialState = {
   isLoading: false,
   error: null,
   referralCode: '',
+  isRegistered: false, // Added state to track registration success
 };
 
 // Async Thunk for Login
@@ -76,6 +77,7 @@ const authSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
+      state.isRegistered = false; // Reset isRegistered when clearing errors
     },
   },
   extraReducers: (builder) => {
@@ -83,29 +85,35 @@ const authSlice = createSlice({
     builder.addCase(loginUser.pending, (state) => {
       state.isLoading = true;
       state.error = null;
+      state.isRegistered = false; // Reset on pending
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.isLoading = false;
       state.token = action.payload.token;
+      state.isRegistered = false; // Reset on success
       // Aap user details bhi yahaan set kar sakte hain agar API response mein ho
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+      state.isRegistered = false; // Reset on error
     });
 
     // Registration Cases
     builder.addCase(registerUser.pending, (state) => {
       state.isLoading = true;
       state.error = null;
+      state.isRegistered = false; // Reset on pending
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.isLoading = false;
+      state.isRegistered = true; // Set to true on successful registration
       // Registration successful, aap yahaan kuch state update kar sakte hain agar zaroorat ho
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+      state.isRegistered = false; // Reset on error
     });
   },
 });

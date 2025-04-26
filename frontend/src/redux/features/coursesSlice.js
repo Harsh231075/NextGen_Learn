@@ -7,22 +7,24 @@ export const fetchRegisteredCourses = createAsyncThunk(
   'courses/fetchRegisterdCourses',
   async (_, thunkAPI) => {
     try {
+      console.log("call");
       const token = localStorage.getItem('token'); // Adjust as needed
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/registered-courses`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
-      return response.data;
+      console.log("API Response:", response.data);
+      return response.data.courses; // Assuming your API response has a 'courses' array
     } catch (error) {
+      console.error("Error fetching registered courses:", error);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
 const initialState = {
-  data: [],
+  courses: [], // Changed 'data' to 'courses' to match the selector name
   loading: false,
   error: null,
 };
@@ -30,7 +32,7 @@ const initialState = {
 const coursesSlice = createSlice({
   name: 'courses',
   initialState,
-  reducers: {}, // Agar koi synchronous actions hain toh yahan define karein
+  reducers: {}, // If you have synchronous actions, define them here
   extraReducers: (builder) => {
     builder
       .addCase(fetchRegisteredCourses.pending, (state) => {
@@ -39,7 +41,7 @@ const coursesSlice = createSlice({
       })
       .addCase(fetchRegisteredCourses.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        state.courses = action.payload; // Store the fetched courses directly in the 'courses' array
       })
       .addCase(fetchRegisteredCourses.rejected, (state, action) => {
         state.loading = false;
@@ -48,6 +50,8 @@ const coursesSlice = createSlice({
   },
 });
 
-export const getRegisteredCourses = (state) => state.courses.data.courses;
+export const getRegisteredCourses = (state) => state.courses.courses; // Selector now directly accesses state.courses.courses
+export const getCoursesLoading = (state) => state.courses.loading;
+export const getCoursesError = (state) => state.courses.error;
 
 export default coursesSlice.reducer;

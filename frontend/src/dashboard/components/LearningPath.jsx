@@ -3,7 +3,7 @@ import { BookOpen, Clock, BrainCircuit, ArrowLeft, Pencil, Calendar, ArrowRight,
 import AIGuidance from '../AIGuidance/AIGuidance';
 import UserForm from '../AIGuidance/UserForm'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRegisteredCourses, getRegisteredCourses } from '../../redux/features/coursesSlice';
+import { fetchRegisteredCourses, getRegisteredCourses, getCoursesLoading, getCoursesError } from '../../redux/features/coursesSlice'; // Import loading and error selectors
 import { Link } from 'react-router-dom';
 
 const LearningPath = () => {
@@ -11,11 +11,13 @@ const LearningPath = () => {
   const [showOwnStudy, setShowOwnStudy] = useState(false);
   const dispatch = useDispatch();
   const courses = useSelector(getRegisteredCourses);
-  console.log(courses);
+  const isLoading = useSelector(getCoursesLoading);
+  const error = useSelector(getCoursesError);
 
   useEffect(() => {
-    dispatch(fetchRegisteredCourses);
-  }, [dispatch]);
+    console.log('Fetching registered courses...');
+    dispatch(fetchRegisteredCourses());
+  }, [dispatch]); // The dispatch dependency ensures the effect runs if the dispatch function changes (though it rarely does)
 
   const handleBack = () => {
     setShowAIGuidance(false);
@@ -82,74 +84,89 @@ const LearningPath = () => {
             Your Learning Paths
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {courses.map((course) => (
-              <div
-                key={course._id}
-                className="group bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden"
-              >
-                <div className="p-5 space-y-4">
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-1">
-                      <h3 className="font-semibold text-lg text-gray-800 group-hover:text-blue-600 transition-colors">
-                        {course.studyContent.study_topic}
-                      </h3>
-                      <p className="text-sm text-gray-500">{course.studyContent.difficulty}</p>
+          {isLoading ? (
+            <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
+              <Clock className="w-16 h-16 mx-auto mb-4 text-blue-100 animate-spin" />
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Loading Your Learning Paths...</h3>
+              <p className="text-gray-500">Please wait while we fetch your courses.</p>
+            </div>
+          ) : error ? (
+            <div className="bg-white rounded-2xl border border-red-300 p-12 text-center">
+              <svg className="w-16 h-16 mx-auto mb-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Paths</h3>
+              <p className="text-red-500">{error}</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {courses && courses.map((course) => (
+                <div
+                  key={course._id}
+                  className="group bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden"
+                >
+                  <div className="p-5 space-y-4">
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-1">
+                        <h3 className="font-semibold text-lg text-gray-800 group-hover:text-blue-600 transition-colors">
+                          {course.studyContent.study_topic}
+                        </h3>
+                        <p className="text-sm text-gray-500">{course.studyContent.difficulty}</p>
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${course.completed
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-amber-100 text-amber-700'
+                        }`}>
+                        {course.completed ? 'Completed' : 'In Progress'}
+                      </span>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${course.completed
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-amber-100 text-amber-700'
-                      }`}>
-                      {course.completed ? 'Completed' : 'In Progress'}
-                    </span>
-                  </div>
 
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Clock className="w-4 h-4" />
-                      <span>Week {course.week} of {course.studyContent.total_weeks}</span>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Clock className="w-4 h-4" />
+                        <span>Week {course.week} of {course.studyContent.total_weeks}</span>
+                      </div>
+
+                      <div className="w-full bg-gray-100 rounded-full h-2">
+                        <div
+                          className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+                          style={{
+                            width: `${(course.week / course.studyContent.total_weeks) * 100}%`
+                          }}
+                        />
+                      </div>
                     </div>
 
-                    <div className="w-full bg-gray-100 rounded-full h-2">
-                      <div
-                        className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
-                        style={{
-                          width: `${(course.week / course.studyContent.total_weeks) * 100}%`
-                        }}
-                      />
+                    <div className="pt-3 flex justify-between items-center border-t border-gray-100">
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <Calendar className="w-4 h-4" />
+                        <span>{new Date(course.createdAt).toLocaleDateString()}</span>
+                      </div>
+                      <Link
+                        to={`/learn/${course._id}`}
+                        className="flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 group-hover:gap-2 transition-all"
+                      >
+                        Continue
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
                     </div>
-                  </div>
-
-                  <div className="pt-3 flex justify-between items-center border-t border-gray-100">
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <Calendar className="w-4 h-4" />
-                      <span>{new Date(course.createdAt).toLocaleDateString()}</span>
-                    </div>
-                    <Link
-                      to={`/learn/${course._id}`}
-                      className="flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 group-hover:gap-2 transition-all"
-                    >
-                      Continue
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-
-          {courses.length === 0 && (
-            <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-              <Trophy className="w-16 h-16 mx-auto mb-4 text-blue-100" />
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Start Your Journey!</h3>
-              <p className="text-gray-500 mb-6">Choose AI-guided or custom study to begin learning</p>
-              <button
-                onClick={() => setShowAIGuidance(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
-              >
-                <BrainCircuit className="w-5 h-5" />
-                Get AI Recommendations
-              </button>
+              ))}
+              {courses && courses.length === 0 && (
+                <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
+                  <Trophy className="w-16 h-16 mx-auto mb-4 text-blue-100" />
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Start Your Journey!</h3>
+                  <p className="text-gray-500 mb-6">Choose AI-guided or custom study to begin learning</p>
+                  <button
+                    onClick={() => setShowAIGuidance(true)}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
+                  >
+                    <BrainCircuit className="w-5 h-5" />
+                    Get AI Recommendations
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
