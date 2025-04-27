@@ -18,7 +18,9 @@ const Sidebar = () => {
     { path: '/dashboard/community', icon: <Users />, title: 'Community' },
     { path: '/dashboard/referral', icon: <Gift />, title: 'Referral & Earnings' },
     { path: '/dashboard/profile', icon: <Settings />, title: 'Profile & Settings' },
-    { path: '/dashboard/certificates', icon: <Award />, title: 'Certificates' }
+    { path: '/dashboard/certificates', icon: <Award />, title: 'Certificates' },
+    { path: '/dashboard/leaderbaord', icon: <Award />, title: 'leaderbaord' },
+    // { path: '/dashboard/protfolio', icon: <Award />, title: 'protfolio' }
   ];
 
   return (

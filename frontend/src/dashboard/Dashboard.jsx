@@ -13,6 +13,8 @@ import { Routes, Route, Outlet } from 'react-router-dom'; // Use Routes and Rout
 import { useDispatch } from 'react-redux';
 import { fetchRegisteredCourses } from '../redux/features/coursesSlice';
 import { fetchDashboardData } from '../redux/features/dashboardSlice';
+import Leaderbaord from "./components/Leaderbaord";
+// import Protfolio from '../pages/Portfolio'
 const DashboardLayout = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -75,6 +77,8 @@ const Dashboard = () => {
         <Route path="profile" element={<ProfileSettings />} />
         <Route path="certificates" element={<Certificates />} />
         <Route path="" element={<PerformanceOverview />} /> {/* Default nested route */}
+        <Route path="leaderbaord" element={<Leaderbaord/>}/>
+        {/* <Route path='protfolio/:id' element={< Protfolio/>}/> */}
       </Route>
     </Routes>
   );

@@ -15,6 +15,7 @@ import MentorResult from "./pages/MentorResult";
 import Dashboard from "./dashboard/Dashboard";
 import VoiceInputOutput from "./pages/VoiceInputOutput";
 import Chat from "./components/Chat";
+import Protfolio from './pages/Portfolio'
 import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ children }) => {
@@ -53,6 +54,7 @@ function App() {
       <Route path="/mentor-result" element={<ProtectedRoute><MentorResult /></ProtectedRoute>} />
       <Route path="/voice" element={<ProtectedRoute><VoiceInputOutput /></ProtectedRoute>} />
       <Route path="/chat" element={<ProtectedRoute><Chat user={currentUser} /></ProtectedRoute>} />
+      <Route path='/protfolio/:userId' element={<ProtectedRoute><Protfolio/></ProtectedRoute>}/>
     </Routes>
   );
 }

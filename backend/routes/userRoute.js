@@ -1,5 +1,5 @@
 import express from 'express';
-import { getRegisteredCourses, login, registerUser, getCourseDetails, updateDetails } from '../controller/userController.js';
+import { getRegisteredCourses, login, registerUser, getCourseDetails, updateDetails, getLeaderboard, getUserProfile } from '../controller/userController.js';
 import authenticateUser from '../middleware/authMiddleware.js'
 
 const router = express.Router();
@@ -10,5 +10,6 @@ router.post('/login', login);
 router.get("/registered-courses", authenticateUser, getRegisteredCourses);
 router.get('/coures-detail/:courseId', getCourseDetails);
 router.put('/update-profile', authenticateUser, updateDetails)
-
+router.get('/leaderbaord', getLeaderboard);
+router.get('/getUserProfile/:userId', getUserProfile);
 export default router;

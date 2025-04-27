@@ -9,7 +9,6 @@ import userRoutes from './routes/userRoute.js'
 import aiRoute from './routes/aiRoute.js'
 import dashbaord from './routes/dashbaordRoute.js'
 import community from './routes/communityRoute.js'
-import discord from './routes/discordRoute.js'
 import chatRoute from './routes/chatRoute.js';
 
 import { createServer } from 'http';
@@ -59,7 +58,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/ai', aiRoute);
 app.use('/detail', dashbaord);
 app.use('/community', community);
-app.use('/discord', discord);
 app.use('/api/chat', chatRoute);
 
 app.get("/", (req, res) => {

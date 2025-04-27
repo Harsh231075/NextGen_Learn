@@ -26,8 +26,11 @@ router.get("/dashboard", authenticateUser, async (req, res) => {
       StudyModel.findOne({ userId: userIdObject }),
     ]);
 
+
+
     const formattedResponse = {
       user: {
+        _id:user._id,
         name: user.name,
         photo: user.photo,
         referralNumber: user.referral,
@@ -40,6 +43,7 @@ router.get("/dashboard", authenticateUser, async (req, res) => {
         bio: user.bio,
         createdcommunity: user.createdCommunities,
         mentor: user.point >= 100 ? true : false,
+        level: Math.min(100, Math.floor((user.point / 10000) * 100)),
       },
       learningProgress: progress
         ? {

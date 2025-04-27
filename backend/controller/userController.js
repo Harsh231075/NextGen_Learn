@@ -204,3 +204,63 @@ export const updateDetails = async (req, res) => {
     return res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
+// controllers/leaderboardController.js
+
+// import User from '../models/User.js';
+
+export const getLeaderboard = async (req, res) => {
+  try {
+    const users = await User.find({}, 'name photo point')
+      .sort({ point: -1 }); // points ke hisaab se sort
+
+    // Rank add karna
+    const leaderboard = users.map((user, index) => ({
+      _id: user._id,
+      name: user.name,
+      photo: user.photo,
+      point: user.point,
+      rank: index + 1, // index 0 se start hota hai, isliye +1
+    }));
+
+    res.status(200).json({
+      success: true,
+      message: 'Leaderboard fetched successfully',
+      data: leaderboard,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong while fetching leaderboard',
+    });
+  }
+};
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const { userId } = req.params; // frontend se userId milegi
+
+    const user = await User.findById(userId, 'name photo bio skills projects education');
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User profile fetched successfully',
+      data: user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong while fetching user profile',
+    });
+  }
+};

@@ -7,11 +7,11 @@ const authenticateUser = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({ message: "Unauthorized: No token provided" });
     }
-    console.log("hello", token);
+    // console.log("hello", token);
     // ✅ Verify Token
     const decoded = jwt.verify(token, process.env.SECRET_KEY); // Replace with actual secret key
     req.userId = decoded.id; // ✅ Attach user ID to request
-    console.log(decoded);
+    // console.log(decoded);
     // ✅ Check if user exists
     const user = await User.findById(req.userId);
     if (!user) {

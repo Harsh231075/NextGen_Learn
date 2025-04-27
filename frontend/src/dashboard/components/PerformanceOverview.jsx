@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import useLeaderboard from '../../hooks/leaderbord';
+import { jwtDecode } from 'jwt-decode'; 
 import {
   BarChart,
   Trophy,
@@ -148,7 +150,7 @@ const SimpleDashboardHeader = ({ userData }) => {
             <Star className="h-5 w-5 text-yellow-300" />
             <div>
               <p className="text-xs text-white/80">Level</p>
-              <p className="font-semibold">15</p>
+              <p className="font-semibold">{userData?.level}</p>
             </div>
           </div>
         </div>
@@ -159,15 +161,34 @@ const SimpleDashboardHeader = ({ userData }) => {
 
 const PerformanceOverview = () => {
   // const dispatch = useDispatch();
+  const { users } = useLeaderboard();
   const dashboardData = useSelector(selectDashboardData);
   const loading = useSelector(selectDashboardLoading);
   const error = useSelector(selectDashboardError);
+  const token = localStorage.getItem('token');
+  // console.log(dashboardData?.user?.level);
 
+let userId = null;
+if (token) {
+  const decodedToken = jwtDecode(token);
+  userId = decodedToken.id || decodedToken._id; 
+}
+
+const currentUser = users.find((user) => user._id === userId);
+
+// console.log("Current User:", currentUser);
+
+// const maxPoints = 10000; // maximum points jispar level 100 milega
+
+// const calculateLevel = (points) => {
+//   console.log(points);
+//   const maxPoints = 10000;
+//   return Math.min(100, Math.floor((points / maxPoints) * 100));
+// }
   // Fetch dashboard data when component mounts
   // useEffect(() => {
-  //   dispatch(fetchDashboardData());
-  //   dispatch(fetchRegisteredCourses());
-  // }, [dispatch]);
+     
+  // }, []);
 
   // Loading state
   if (loading) {
@@ -269,12 +290,12 @@ const PerformanceOverview = () => {
   const profileStats = [
     {
       label: 'Current Level',
-      value: dashboardData?.user?.level || '15',
+      value:dashboardData?.user?.level || '13',
       icon: <ShieldCheck className="h-5 w-5 text-white" />,
     },
     {
       label: 'Global Rank',
-      value: dashboardData?.user?.rank || 'N/A',
+      value: currentUser?.rank || 'N/A',
       icon: <Users className="h-5 w-5 text-white" />,
     },
   ];
