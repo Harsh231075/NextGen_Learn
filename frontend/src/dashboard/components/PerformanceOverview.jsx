@@ -290,7 +290,7 @@ const currentUser = users.find((user) => user._id === userId);
   const profileStats = [
     {
       label: 'Current Level',
-      value:dashboardData?.user?.level || '13',
+      value:dashboardData?.user?.level || '0',
       icon: <ShieldCheck className="h-5 w-5 text-white" />,
     },
     {

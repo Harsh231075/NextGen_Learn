@@ -295,7 +295,7 @@ export default function EnhancedPortfolio() {
               <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
                 {userData.name}
               </h2>
-              <p className="text-gray-400 mt-1">Full Stack Developer</p>
+              <p className="text-gray-400 mt-1">{userData.bio}</p>
             </div>
             
             <div className="flex space-x-6">
