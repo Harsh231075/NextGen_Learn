@@ -31,6 +31,10 @@ Traditional e-learning platforms struggle with:
 
 ## 🌟 Core Features
 
+### 📚 Dashboard 
+Visualize growth with dashboards and instant feedback.  
+![Dashboard](./frontend/src/assets/dashboard.png)
+
 ### 📚 Personalized Learning Paths  
 Adaptive journeys tailored to each user's performance.  
 ![Personalized Learning](./frontend/src/assets/Learning.png)
@@ -57,10 +61,15 @@ Collaborate, discuss, and learn with mentors and peers.
 
 ### 💸 Referral & Monetization  
 Users can earn rewards through referrals or as community mentors.  
-![Monetization](<URL_TO_MONETIZATION_IMAGE>)
+![Monetization](./frontend/src/assets/reffreral.png)
 
 ---
 
+### 💸 Certification & Protfolio
+Users can earn Certification after passing test and view Protfolio.  
+![Certificate](./frontend/src/assets/cartifaicate.png)
+
+---
 ### 📊 Learderboard  
 Visualize growth with dashboards and instant feedback.  
 ![Performance Tracking](./frontend/src/assets/Leaderboard.png)
@@ -79,19 +88,14 @@ Visualize growth with dashboards and instant feedback.
 | Realtime   | Socket.IO                                |
 | Media/Storage | Cloudinary                            |
 
-![Tech Stack](<URL_TO_TECHSTACK_IMAGE>)
+![Tech Stack](./frontend/src/assets/tech.png)
 
----
-
-## 🧩 Architecture / Flow Diagram  
-(Show how AI, user progress, and real-time updates flow.)  
-![System Architecture](<URL_TO_ARCHITECTURE_IMAGE>)
 
 ---
 
 ## 🎥 Demo
 
-📺 Watch the full demo here: [Link to demo video](#)
+📺 Watch the full demo here: [https://drive.google.com/file/d/1aIu81vVjpJlz7Dq1vy-AwowuVkOmo9GY/view?usp=drive_link](#)
 
 ---
 
@@ -99,7 +103,7 @@ Visualize growth with dashboards and instant feedback.
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/nextgen-learn.git
+git clone https://github.com/Harsh231075/NextGen_Learn
 
 # Navigate to the project
 cd nextgen-learn
