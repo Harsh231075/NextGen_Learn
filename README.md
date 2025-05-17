@@ -106,11 +106,11 @@ Visualize growth with dashboards and instant feedback.
 git clone https://github.com/Harsh231075/NextGen_Learn
 
 # Navigate to the project
-cd nextgen-learn
+cd Code_X
 
 # Install dependencies for frontend and backend
-cd client && npm install
-cd ../server && npm install
+cd frontend && npm install
+cd backend && npm install
 
 # Run the app
 npm run dev
