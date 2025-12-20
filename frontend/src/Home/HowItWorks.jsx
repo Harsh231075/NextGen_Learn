@@ -1,7 +1,8 @@
 // HowItWorks.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
-import { UserPlus, Brain, Users } from 'lucide-react';
+import { UserPlus, Brain, Users, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const HowItWorks = () => {
   const steps = [
@@ -32,8 +33,14 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-0 w-64 h-64 bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -41,14 +48,24 @@ const HowItWorks = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="inline-block mb-4"
+          >
+            <span className="px-4 py-2 bg-indigo-100 text-indigo-600 rounded-full text-sm font-semibold">
+              Simple Process
+            </span>
+          </motion.div>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             How It{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
               Works
             </span>
           </h2>
-          <p className="text-xl text-gray-600">
-            Start your learning journey in three simple steps
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Start your learning journey in three simple steps and transform your career
           </p>
         </motion.div>
 
@@ -112,9 +129,13 @@ const HowItWorks = () => {
             viewport={{ once: true }}
             className="text-center mt-16"
           >
-            <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full text-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+            <Link
+              to="/sign-login"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full text-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
               Start Your Journey Now
-            </button>
+              <ArrowRight className="h-5 w-5" />
+            </Link>
           </motion.div>
         </div>
       </div>

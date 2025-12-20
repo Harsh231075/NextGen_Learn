@@ -2,13 +2,16 @@
 import React from 'react';
 import { Menu, Home, BookOpen, Bot, Users, Gift, Settings, Award, LogOut } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/features/authSlice';
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Token remove
-    navigate('/'); // Navigate to home
+    dispatch(logout()); // Clear Redux state
+    navigate('/', { replace: true }); // Navigate to home and replace history
   };
 
   const menuItems = [
