@@ -12,7 +12,7 @@ export const askAI = async (req, res) => {
     // const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash",
+      model: "gemini-flash-latest",
       systemInstruction: SYSTEM_INSTRUCTION, // AI Role
     });
     const result = await model.generateContent(message);

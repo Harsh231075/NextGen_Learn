@@ -9,7 +9,7 @@ import { getEnv } from '../utils/getEnv.js';
 
 
 export const model = new ChatGoogleGenerativeAI({
-  model: 'gemini-2.0-flash-001', // or 'gemini-1.0-pro', 'gemini-2.0' etc.
+  model: 'gemini-flash-latest', // or 'gemini-1.0-pro', 'gemini-2.0' etc.
   apiKey: getEnv('GEMINI_API_KEY'),
   temperature: 0.7,
   maxOutputTokens: 2048,

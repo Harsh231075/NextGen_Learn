@@ -15,12 +15,12 @@ async function generateContent(role, promptType, variables) {
     if (role === "performance") {
 
       model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: "gemini-flash-latest",
         // systemInstruction: getSystemInstruction(role), // AI Role
       });
     } else {
       model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: "gemini-flash-latest",
         systemInstruction: getSystemInstruction(role), // AI Role
       });
     }

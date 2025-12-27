@@ -4,7 +4,7 @@ import { getEnv } from "../utils/getEnv.js";
 const genAI = new GoogleGenerativeAI(getEnv("GEMINI_API_KEY"));
 
 export const getGeminiModel = () => {
-  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  return genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
 };
 
 export const generateText = async (prompt) => {

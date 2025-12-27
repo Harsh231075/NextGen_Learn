@@ -7,7 +7,7 @@ const generateAIResponse = async (conversation) => {
     const genAI = new GoogleGenerativeAI(apiKey);
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash",
+      model: "gemini-flash-latest",
       systemInstruction: `
   Tum ek AI assistant ho.
   Hamesha short, clear aur concise jawab do.
